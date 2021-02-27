@@ -82,6 +82,7 @@ function makeResponsive() {
           .attr("cx", d => xScale(d.poverty))
           .attr("cy", d => yScale(d.healthcare))
           .attr("r", "15")
+          .classed("inactive", true)
           .classed("stateCircle", true);
           
         var textgroup =chartGroup.selectAll()
@@ -111,27 +112,25 @@ function makeResponsive() {
           .classed("active", true)
           .text("In Poverty (%)");
   
-    //     // Step 1: Initialize Tooltip
-    //     var toolTip = d3.tip()
-    //       .attr("class", "tooltip")
-    //       // instead of event.pageX, can use offset
-    //       .offset([80, -60])
-    //       .html(function(d) {
-    //         // hr is horizontal rule and creates a line to divide
-    //         return (`<strong>${d.medals}<strong>`);
-    //       });
   
-    //     // Step 2: Create the tooltip in chartGroup.
-    //     chartGroup.call(toolTip);
+        var toolTip = d3.tip()
+          .attr("class", "tooltip")
+          .offset([80,-40])
+          .html(function(d) {
+            return (`<strong>${d.state}<br><hr>Poverty: ${d.poverty}%<br>Healthcare: ${d.healthcare}%<strong>`);
+          });
+         
+        chartGroup.call(toolTip);
   
-    //     // Step 3: Create "mouseover" event listener to display tooltip
-    //     circlesGroup.on("mouseover", function(d) {
-    //       toolTip.show(d, this);
-    //     })
-    //     // Step 4: Create "mouseout" event listener to hide tooltip
-    //       .on("mouseout", function(d) {
-    //         toolTip.hide(d);
-    //       });
+        // Step 3: Create "mouseover" event listener to display tooltip
+        circlesGroup.on("mouseover", function(d) {
+          toolTip.show(d, this)
+         
+        })
+        // Step 4: Create "mouseout" event listener to hide tooltip
+          .on("mouseout", function(d) {
+            toolTip.hide(d)
+          });
 
     // .catch(function(error) {
     //     console.log(error);
