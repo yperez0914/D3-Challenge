@@ -18,8 +18,8 @@ function makeResponsive() {
     var margin = {
       top: 50,
       bottom: 50,
-      right: 50,
-      left: 50
+      right: 300,
+      left: 100
     };
   
     var height = svgHeight - margin.top - margin.bottom;
@@ -37,17 +37,12 @@ function makeResponsive() {
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
     // create axis title
-    // var xLabel = -50;
-    // var yLabel = svgHeight / 2;
+    var yLabelWidth = 50;
+    var yLabelHeight = svgHeight / 2;
 
-    // chartGroup.append('g')
-    // .attr("transform", `translate(${xLLabel}, ${yLabel} )`)
-    // .append("text")
-    // .attr('text-anchor', 'middle')
-    // .attr("transform", 'rotate(-90)')
-    // .attr("font-size", "30px")
-    // .text("Lacks Healthcare (%)");
-  
+    var xLabelWidth = svgWidth/2;
+    var xLabelHeight = svgHeight -10;
+    
     // Read CSV
     d3.csv("assets/data/data.csv").then(function(healthData) {
   
@@ -57,16 +52,17 @@ function makeResponsive() {
           });
   
         // create scales
-        var xScale = d3.scaleBand()
+        var xScale = d3.scaleLinear()
           .domain(d3.extent(healthData, d=>d.poverty))
-          .range([0, width]);
-  
+          .range([0, width])
+          
+          console.log(xScale (19));
         var yScale = d3.scaleLinear()
           .domain([0, d3.max(healthData, d => d.healthcare)])
           .range([height, 0]);
         
         // create axes
-        var xAxis = d3.axisBottom(xScale).ticks(10);
+        var xAxis = d3.axisBottom(xScale);
         var yAxis = d3.axisLeft(yScale);
   
         // append axes
@@ -85,15 +81,35 @@ function makeResponsive() {
           .append("circle")
           .attr("cx", d => xScale(d.poverty))
           .attr("cy", d => yScale(d.healthcare))
-        // .attr("cx", d => d.poverty)
-        // .attr("cy", d => d.healthcare)
           .attr("r", "15")
           .classed("stateCircle", true);
           
-        circlesGroup.append("text")
+        var textgroup =chartGroup.selectAll()
+          .data(healthData)
+          .enter()
+          .append("text")
           .text(d=>d.abbr)
+          .attr("x", d => xScale(d.poverty))
+          .attr("y", d=> yScale(d.healthcare) +4)
           .attr("font-size", "10px")
           .classed("stateText", true);
+
+          svg.append('g')
+          .attr("transform", `translate(${yLabelWidth}, ${yLabelHeight} )`)
+          .append("text")
+          .attr('text-anchor', 'middle')
+          .attr("transform", 'rotate(-90)')
+          .attr("font-size", "20px")
+          .classed("active", true)
+          .text("Lacks Healthcare (%)");
+      
+          svg.append('g')
+          .attr("transform", `translate(${xLabelWidth}, ${xLabelHeight} )`)
+          .append("text")
+          .attr('text-anchor', 'middle')
+          .attr("font-size", "20px")
+          .classed("active", true)
+          .text("In Poverty (%)");
   
     //     // Step 1: Initialize Tooltip
     //     var toolTip = d3.tip()
