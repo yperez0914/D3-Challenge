@@ -1,4 +1,4 @@
-// @TODO: YOUR CODE HERE!
+
 function makeResponsive() {
 
     // if the SVG area isn't empty when the browser loads,
@@ -112,7 +112,7 @@ function makeResponsive() {
           .classed("active", true)
           .text("In Poverty (%)");
   
-  
+        // Create toolTip
         var toolTip = d3.tip()
           .attr("class", "tooltip")
           .offset([80,-40])
@@ -122,25 +122,22 @@ function makeResponsive() {
          
         chartGroup.call(toolTip);
   
-        // Step 3: Create "mouseover" event listener to display tooltip
+        
         circlesGroup.on("mouseover", function(d) {
           toolTip.show(d, this)
          
         })
-        // Step 4: Create "mouseout" event listener to hide tooltip
           .on("mouseout", function(d) {
             toolTip.hide(d)
           });
 
-    // .catch(function(error) {
-    //     console.log(error);
-    // });
+ 
     });
 }
-    // When the browser loads, makeResponsive() is called.
+
     makeResponsive();
 
-    // When the browser window is resized, makeResponsive() is called.
+
     d3.select(window).on("resize", makeResponsive);
   
   
