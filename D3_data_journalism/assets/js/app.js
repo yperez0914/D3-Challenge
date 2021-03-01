@@ -82,7 +82,6 @@ function makeResponsive() {
           .attr("cx", d => xScale(d.poverty))
           .attr("cy", d => yScale(d.healthcare))
           .attr("r", "15")
-          .classed("inactive", true)
           .classed("stateCircle", true);
           
         var textgroup =chartGroup.selectAll()
@@ -115,7 +114,7 @@ function makeResponsive() {
         // Create toolTip
         var toolTip = d3.tip()
           .attr("class", "tooltip")
-          .offset([80,-40])
+          .offset([40,-80])
           .html(function(d) {
             return (`<strong>${d.state}<br><hr>Poverty: ${d.poverty}%<br>Healthcare: ${d.healthcare}%<strong>`);
           });
@@ -124,14 +123,23 @@ function makeResponsive() {
   
         
         circlesGroup.on("mouseover", function(d) {
-          toolTip.show(d, this)
+          toolTip.show(d, this);
+          d3.select(this).style("stroke", "black");
          
         })
           .on("mouseout", function(d) {
-            toolTip.hide(d)
+            toolTip.hide(d);
+            d3.select(this).style("stroke", "white");
           });
 
- 
+        textgroup.on("mouseover", function(d) {
+          tooltip.show(d, this);
+          d3.select(this).style("stroke", "black");
+        })
+          .on("mouseout", function(d) {
+            tooltip.hide(d);
+            d3.select(this).style("stroke", "white");
+          });
     });
 }
 
